@@ -1,0 +1,1 @@
+This projects shows how to connect to a remote host using an SSH RSA key pair.

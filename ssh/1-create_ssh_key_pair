@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script creates an SSH key pair for secure access
+
+ssh-keygen -t rsa -b 4096 -f school -N "betty"

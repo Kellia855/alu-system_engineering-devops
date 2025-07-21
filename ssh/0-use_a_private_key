@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script sets up SSH to use a private key 
+
+ssh -i ~/.ssh/school ubuntu@18.212.5.177
