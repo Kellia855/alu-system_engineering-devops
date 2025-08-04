@@ -10,6 +10,10 @@ sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
 sed -i 's/listen 80 default_server;/listen 8080 default_server;/g' /etc/nginx/sites-available/default
 sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/g' /etc/nginx/sites-available/default
 
+# Ensure Nginx default site exists
+if [ ! -f /etc/nginx/sites-enabled/default ]; then
+  ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+fi
 # Start Nginx as foreground process
 nginx -g 'daemon off;'
 
