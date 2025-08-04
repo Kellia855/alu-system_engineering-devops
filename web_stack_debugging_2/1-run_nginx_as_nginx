@@ -1,19 +1,12 @@
-#!/bin/bash
-# Configures Nginx to run as the nginx user and listen on port 8080
+#!/usr/bin/env bash
+#task 2
 
-set -e
+sed -i "s/#user www-data/user nginx/" /etc/nginx/nginx.conf
 
-# Ensure nginx config uses nginx user
-sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
 
-# Update default site config to listen on port 8080
-sed -i 's/listen 80 default_server;/listen 8080 default_server;/g' /etc/nginx/sites-available/default
-sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/g' /etc/nginx/sites-available/default
+chmod 644 /etc/nginx/nginx.conf
 
-# Ensure Nginx default site exists
-if [ ! -f /etc/nginx/sites-enabled/default ]; then
-  ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-fi
-# Start Nginx as foreground process
-nginx -g 'daemon off;'
+pkill apache2
 
+sudo -u nginx service nginx start
