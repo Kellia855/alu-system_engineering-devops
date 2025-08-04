@@ -10,8 +10,5 @@ sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
 sed -i 's/listen 80 default_server;/listen 8080 default_server;/g' /etc/nginx/sites-available/default
 sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/g' /etc/nginx/sites-available/default
 
-# Start nginx in the background
-service nginx start
-
-# Confirm nginx is running as nginx user
-ps -eo user,pid,cmd | grep '[n]ginx'
+# Start Nginx as foreground process
+nginx -g 'daemon off;'
