@@ -1,35 +1,29 @@
 #!/usr/bin/env bash
-# Configures a new ubuntu machine by installing
-# Nginx where it should be listening on port 80
-# Serve a page that would return a Hello World string
-#
+# Installs and configures Nginx to return Holberton School on root
 
-echo -e "Updating and installing Nginx.\n"
-sudo apt-get update -y -qq && \
-	 sudo apt-get install nginx -y
-sudo apt-get install -y ufw
+set -e
 
-echo -e "\nSetting up some minor stuff.\n"
+echo "Installing Nginx..."
+sudo apt-get update -y -qq
+sudo apt-get install -y nginx ufw
 
-sudo ufw enable;
+echo "Configuring firewall..."
+sudo ufw allow 'Nginx HTTP'
+echo "y" | sudo ufw enable
 
-# starting nginx service
+echo "Starting Nginx..."
 sudo service nginx start
 
-# allowing nginx on firewall
-sudo ufw allow 'Nginx HTTP'
-
-# Give the user ownership to website files for easy editing
+echo "Setting permissions..."
 sudo chown -R "$USER":"$USER" /var/www/html
 sudo chmod -R 755 /var/www
 
-# Backup default index
-cp /var/www/html/index.html /var/www/html/index.html.bckp
+echo "Creating custom index.html..."
+echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
 
-# Creating new index
-echo -e "!Holberton School for the win" | dd status=none of=/var/www/html/index.html
-
-# Restarting nginx
+echo "Restarting Nginx..."
 sudo service nginx restart
 
-echo -e "\nCompleted. \n"
+# Confirm Nginx is running
+ps aux | grep '[n]ginx'
+
