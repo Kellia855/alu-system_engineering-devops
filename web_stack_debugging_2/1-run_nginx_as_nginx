@@ -3,13 +3,17 @@
 
 set -e
 
-# Ensure nginx config uses nginx user
+# Update nginx user
 sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
 
-# Update default site config to listen on port 8080
+# Change Nginx to listen on port 8080
 sed -i 's/listen 80 default_server;/listen 8080 default_server;/g' /etc/nginx/sites-available/default
-sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/g' /etc/nginx/sites-available/default
+sed -i 's/listen \[::\]:80 default_server;/listen [::]:8080 default_server;/g' /etc/nginx/sites-available/default
 
-# Start Nginx as foreground process
-nginx -g 'daemon off;'
+# Start Nginx service
+service nginx start
+
+# Confirm it's running as the nginx user
+ps aux | grep '[n]ginx'
+
 
