@@ -1,29 +1,32 @@
 #!/usr/bin/env bash
-# Installs and configures Nginx to return Holberton School on root
+# Installs and configures Nginx to return Holberton School 
 
-set -e
+echo -e "Updating and installing Nginx.\n"
+sudo apt-get update -y -qq && \
+	 sudo apt-get install nginx -y
+sudo apt-get install -y ufw
 
-echo "Installing Nginx..."
-sudo apt-get update -y -qq
-sudo apt-get install -y nginx ufw
+echo -e "\nSetting up some minor stuff.\n"
 
-echo "Configuring firewall..."
-sudo ufw allow 'Nginx HTTP'
-echo "y" | sudo ufw enable
+sudo ufw enable;
 
-echo "Starting Nginx..."
+# starting nginx service
 sudo service nginx start
 
-echo "Setting permissions..."
+# allowing nginx on firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Give the user ownership to website files for easy editing
 sudo chown -R "$USER":"$USER" /var/www/html
 sudo chmod -R 755 /var/www
 
-echo "Creating custom index.html..."
-echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
+# Backup default index
+cp /var/www/html/index.html /var/www/html/index.html.bckp
 
-echo "Restarting Nginx..."
+# Creating new index
+echo -e "!Holberton School for the win" | dd status=none of=/var/www/html/index.html
+
+# Restarting nginx
 sudo service nginx restart
 
-# Confirm Nginx is running
-ps aux | grep '[n]ginx'
-
+echo -e "\nCompleted. \n"
