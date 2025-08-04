@@ -1,20 +1,15 @@
 #!/usr/bin/env bash
+# Configures Nginx to run as the nginx user and listen on port 8080
 
-# Exit on error
 set -e
 
-# Update the Nginx config to:
-# - Run as nginx user
-# - Listen on 0.0.0.0:8080
+# Ensure nginx config uses nginx user
 sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
+
+# Update default site config to listen on port 8080
 sed -i 's/listen 80 default_server;/listen 8080 default_server;/g' /etc/nginx/sites-available/default
 sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/g' /etc/nginx/sites-available/default
 
-# Ensure Nginx default site exists
-if [ ! -f /etc/nginx/sites-enabled/default ]; then
-  ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-fi
-
-# Restart Nginx
-nginx -g "daemon off;"
+# Start Nginx as foreground process
+nginx -g 'daemon off;'
 
